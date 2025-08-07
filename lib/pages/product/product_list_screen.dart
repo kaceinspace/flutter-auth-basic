@@ -25,48 +25,51 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   Future<void> _refreshProducts() async {
-    setState(() {
-      _loadProducts();
-    });
+    setState(() => _loadProducts());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Products')),
+      appBar: AppBar(
+        title: const Text('Product List'),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+      ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => ProductCreateScreen()),
           );
-          _refreshProducts(); // refresh setelah kembali
+          _refreshProducts();
         },
+        child: const Icon(Icons.add),
       ),
       body: FutureBuilder<List<Product>>(
         future: _futureProducts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator());
-          if (!snapshot.hasData || snapshot.data!.isEmpty)
-            return Center(child: Text("No products"));
+            return const Center(child: CircularProgressIndicator());
+
+          if (snapshot.hasError)
+            return Center(child: Text('Error: ${snapshot.error}'));
+
+          final products = snapshot.data ?? [];
+
+          if (products.isEmpty)
+            return const Center(child: Text("No products found."));
 
           return RefreshIndicator(
             onRefresh: _refreshProducts,
-            child: ListView.builder(
-              itemCount: snapshot.data!.length,
+            child: ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: products.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final product = snapshot.data![index];
-                return ListTile(
-                  leading: Image.network(
-                    'http://127.0.0.1:8000/storage/${product.image}',
-                    width: 50,
-                    errorBuilder: (_, __, ___) =>
-                        Icon(Icons.image_not_supported),
-                  ),
-                  title: Text(product.name),
-                  subtitle: Text('Rp ${product.price}'),
+                final product = products[index];
+                return GestureDetector(
                   onTap: () async {
                     await Navigator.push(
                       context,
@@ -75,8 +78,40 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ProductDetailScreen(productId: product.id),
                       ),
                     );
-                    _refreshProducts(); // refresh setelah kembali dari detail/edit
+                    _refreshProducts();
                   },
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(12),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          'http://127.0.0.1:8000/storage/${product.image}',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              const Icon(Icons.image_not_supported),
+                        ),
+                      ),
+                      title: Text(
+                        product.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Rp ${product.price}',
+                        style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                    ),
+                  ),
                 );
               },
             ),

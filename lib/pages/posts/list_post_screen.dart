@@ -8,45 +8,106 @@ class ListPostScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.amber,
-      child: FutureBuilder<List<PostModel>>(
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text('Daftar Postingan'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
+      body: FutureBuilder<List<PostModel>>(
         future: PostService.listPost(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
           }
 
           final dataPost = snapshot.data ?? [];
+
+          if (dataPost.isEmpty) {
+            return const Center(child: Text("Belum ada postingan."));
+          }
+
           return ListView.builder(
-            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.all(16),
             itemCount: dataPost.length,
             itemBuilder: (context, index) {
-              final data = dataPost[index];
+              final post = dataPost[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => PostDetailScreen(
-                        id: data.id.toString(),
-                        title: data.title,
-                        body: data.body,
-                        userId: data.userId.toString(),
+                        id: post.id.toString(),
+                        title: post.title,
+                        body: post.body,
+                        userId: post.userId.toString(),
                       ),
                     ),
                   );
                 },
-                child: ListTile(
-                  leading: Text(dataPost[index].id.toString()),
-                  title: Text(data.title),
-                  subtitle: Text('User ID: ${data.userId}'),
+                child: Card(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.blue.shade100,
+                              child: Text(
+                                post.id.toString(),
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                post.title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          post.body.length > 100
+                              ? '${post.body.substring(0, 100)}...'
+                              : post.body,
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            'User ID: ${post.userId}',
+                            style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },

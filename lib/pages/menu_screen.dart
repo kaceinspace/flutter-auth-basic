@@ -15,7 +15,7 @@ class _MenuScreenState extends State<MenuScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    HomeScreen(), // Ganti dari Center(text: ...) ke HomeScreen()
+    HomeScreen(),
     ListPostScreen(),
     ProductListScreen(),
     ProfileScreen(),
@@ -31,10 +31,10 @@ class _MenuScreenState extends State<MenuScreen> {
         onTap: (index) => setState(() => _currentIndex = index),
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 44, 42, 42),
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.article), label: 'Posts'),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),

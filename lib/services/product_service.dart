@@ -64,7 +64,7 @@ class ProductService {
         'image',
         imageBytes,
         filename: imageName,
-        contentType: MediaType('image', 'jpeg'),
+        contentType: MediaType('image', 'jpeg|png|jpg'),
       ),
     );
 
