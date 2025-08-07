@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xii_rpl_3/pages/auth/login_screen.dart';
-import 'package:xii_rpl_3/pages/home_screen.dart';
+import 'package:xii_rpl_3/pages/menu_screen.dart';
 import 'package:xii_rpl_3/pages/posts/list_post_screen.dart';
 import 'package:xii_rpl_3/services/auth_service.dart';
 
@@ -13,7 +13,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Belajar Flutter', home: AuthCheck());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Belajar Flutter',
+      home: AuthCheck(),
+    );
   }
 }
 
@@ -44,7 +48,7 @@ class _AuthCheckState extends State<AuthCheck> {
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (snapshot.hasData && snapshot.data == true) {
-          return HomeScreen();
+          return MenuScreen();
         } else {
           return LoginScreen();
         }

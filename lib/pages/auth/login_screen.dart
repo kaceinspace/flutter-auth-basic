@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xii_rpl_3/pages/auth/register_screen.dart';
-import 'package:xii_rpl_3/pages/home_screen.dart';
+import 'package:xii_rpl_3/pages/menu_screen.dart';
 import 'package:xii_rpl_3/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (success) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (_) => HomeScreen()),
+                      MaterialPageRoute(builder: (_) => MenuScreen()),
                     );
                   } else {
                     ScaffoldMessenger.of(

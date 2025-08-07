@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:xii_rpl_3/pages/auth/login_screen.dart';
-import 'package:xii_rpl_3/services/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
-  final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Home'),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                await _authService.logout();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => LoginScreen()),
-                );
-              },
-              icon: Icon(Icons.logout),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.dashboard, size: 80, color: Colors.blue),
+            SizedBox(height: 20),
+            Text(
+              'Selamat Datang di Dashboard',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
+            SizedBox(height: 10),
           ],
         ),
-        body: Center(child: Text('Selamat Datang')),
       ),
     );
   }

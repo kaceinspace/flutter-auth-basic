@@ -44,4 +44,19 @@ class AuthService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') != null;
   }
+
+  Future<Map<String, dynamic>?> getProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.get(
+      Uri.parse('$baseUrl/user'),
+      headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
 }
