@@ -105,6 +105,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               builder: (_) => const LoginScreen(),
                             ),
                           );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Registrasi Berhasil'),
+                            ),
+                          );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Registrasi Gagal')),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xii_rpl_3/pages/auth/login_screen.dart';
 import 'package:xii_rpl_3/pages/menu_screen.dart';
-import 'package:xii_rpl_3/pages/posts/list_post_screen.dart';
 import 'package:xii_rpl_3/services/auth_service.dart';
 
 void main() {
